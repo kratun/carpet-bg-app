@@ -1,0 +1,56 @@
+.container {
+  max-width: 600px;
+  margin: 2rem auto;
+  font-family: sans-serif;
+  padding: 16px;
+}
+
+.heading {
+  font-size: 24px;
+  margin-bottom: 16px;
+  color: #2d7dbf;
+}
+
+.card {
+  display: flex;
+  background: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 10px;
+  cursor: grab;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  gap: 16px;
+  align-items: center;
+}
+
+.cardContent {
+  display: block;
+}
+
+.dateInput {
+  display: block;
+  padding: 8px;
+  font-size: 16px;
+  margin-top: 4px;
+  border-radius: 4px;
+  border: 1px solid rgb(37, 99, 235);
+  box-sizing: border-box;
+  color: #2d7dbf;
+}
+
+.dateControls {
+  display: flex;
+  justify-content: space-between;
+  margin: 16px 0;
+}
+
+.contentItem {
+  display: flex;
+  flex-direction: row;
+  flex-grow: 1;
+  justify-content: space-between;
+}
+.cardContent {
+  width: 100%;
+}

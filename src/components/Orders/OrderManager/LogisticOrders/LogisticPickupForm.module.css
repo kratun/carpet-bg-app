@@ -1,0 +1,6 @@
+.logisticActionsContainer {
+  display: flex;
+  margin: 12px;
+  gap: 16px;
+  justify-content: space-between;
+}
