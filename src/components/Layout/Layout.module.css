@@ -1,0 +1,25 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh; /* allows scrolling if content exceeds viewport */
+}
+
+.body {
+  display: flex;
+  flex: 1;
+}
+
+.sidebar {
+  flex: 1;
+  max-width: 20%; /* Sidebar width */
+  background-color: #f5f5f5;
+  padding: 1rem;
+  box-sizing: border-box;
+}
+
+.content {
+  flex: 4;
+
+  box-sizing: border-box;
+  /* REMOVE overflow-y: auto; to disable inner scroll */
+}

@@ -1,0 +1,40 @@
+/* WashingInProgress.module.css */
+
+.container {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.heading {
+  font-size: 24px;
+  font-weight: 600;
+  color: #2563eb; /* Tailwind primary blue */
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.card {
+  background-color: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 16px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  transition: background-color 0.2s ease;
+}
+
+.card:hover {
+  background-color: #f3f4f6;
+}
+
+.card h3 {
+  margin: 0 0 8px 0;
+  font-size: 18px;
+  color: #1f2937;
+}
+
+.card p {
+  margin: 4px 0;
+  color: #4b5563;
+  font-size: 14px;
+}

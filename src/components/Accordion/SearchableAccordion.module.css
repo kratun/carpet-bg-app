@@ -1,0 +1,67 @@
+.container {
+  /* width: 100%;
+  max-width: 1920px; */
+  margin: auto;
+  padding: 1rem;
+}
+
+.search {
+  margin-bottom: 1rem;
+  display: flex;
+}
+
+.input {
+  width: 100%;
+  padding: 8px;
+  font-size: 1rem;
+  border: 1px solid #2563eb;
+  border-radius: 4px;
+}
+
+.accordion {
+  margin-bottom: 1rem;
+}
+
+.pagination {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.pagination button {
+  padding: 6px 12px;
+  font-size: 1rem;
+  background-color: #2d7dbf;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.pagination button:disabled {
+  background-color: #ccc;
+  cursor: default;
+}
+
+.searchableAccordionItem {
+  padding: 8px;
+  border-bottom: 1px solid #eee;
+  /* display: flex; */
+  align-items: center;
+  gap: 15px;
+}
+
+.searchableAccordionItem:hover {
+  background-color: #f9f9f9;
+}
+
+.searchableAccordionContent {
+  border-left: 1px solid #eee;
+  border-right: 1px solid #eee;
+  border-bottom: 1px solid #eee;
+}
+
+.searchableAccordionItem[data-state="open"] {
+  background-color: #eef2ff; /* Example active background */
+  border-left: 3px solid #3b82f6; /* Optional visual indicator */
+}
