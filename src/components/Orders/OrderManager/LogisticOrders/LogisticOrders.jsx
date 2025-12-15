@@ -11,16 +11,6 @@ import LogisticDeliveryForm from "./LogisticDeliveryForm";
 import Pagination from "../../../UI/Pagination/Pagination.jsx";
 
 export default function LogisticOrders() {
-  // const [params, setParams] = useState({
-  //   searchTerm: "01",
-  //   sortBy: "createdAt",
-  //   sortDirection: "asc",
-  //   pageNumber: 1,
-  //   pageSize: 10,
-  //   statuses: [ORDER_STATUSES.pendingPickup, ORDER_STATUSES.pendingDelivery],
-  //   pickupDate: formattedToday,
-  // });
-
   const [searchTerm, setSearchTerm] = useState("");
   const [pageNumber, setPageNumber] = useState(1);
   const [orders, setOrders] = useState([]);
@@ -43,15 +33,6 @@ export default function LogisticOrders() {
   }, [searchTerm, pageNumber]);
 
   const totalPages = Math.ceil(total / queryParams.pageSize);
-
-  // const fetchOrders = useCallback(async () => {
-  //   setLoading(true);
-  //   const result = await orderService.getAll(params);
-
-  //   setOrders(result.items);
-  //   setTotal(result.totalCount);
-  //   setLoading(false);
-  // }, [params]);
 
   const fetchOrders = useCallback(async () => {
     setLoading(true);
@@ -83,14 +64,9 @@ export default function LogisticOrders() {
         ? ORDER_STATUSES.deliveryComplete
         : ORDER_STATUSES.pickupComplete;
     try {
-      // setTimeout(async () => {
       await orderService.updateOrderStatus(order.id, nextStatus);
       await fetchOrders();
       console.log("Pickup success and orders refreshed.");
-      // }, 0);
-      // await orderService.update(orderId, { status: nextStatus }); // or whatever status should follow
-      // await fetchOrders(); // Refresh the list
-      // console.log("Pickup successful and orders refreshed.");
     } catch (err) {
       console.error("Failed to update pickup status:", err);
     }
@@ -135,6 +111,28 @@ export default function LogisticOrders() {
     setSearchTerm(term);
   }, []);
 
+  const handleDeliveryConfirm = async (order) => {
+    console.log("Delivery successful!");
+
+    const { id, status, ...payload } = order;
+    const nextStatus =
+      status === ORDER_STATUSES.pendingDelivery
+        ? ORDER_STATUSES.deliveryComplete
+        : null;
+
+    if (!nextStatus) {
+      return;
+    }
+
+    try {
+      await orderService.deliveryConfirm(id, payload);
+      await fetchOrders();
+      console.log("Delivery confirm successfully.");
+    } catch (err) {
+      console.error("Failed to update pickup status:", err);
+    }
+  };
+
   if (loading) {
     return <div>Loading</div>;
   }
@@ -164,6 +162,7 @@ export default function LogisticOrders() {
               <LogisticDeliveryForm
                 order={order}
                 onRevertStatus={handleRevertStatus}
+                onDeliveryConfirm={handleDeliveryConfirm}
               />
             );
           } else {

@@ -2,9 +2,14 @@ import { useState } from "react";
 import { ORDER_STATUSES } from "../../../../utils/statuses.util.js";
 import ManageOrderItemsActionsContainer from "../ManageOrderItems/ManageOrderItemsActionsContainer";
 
-export default function LogisticDeliveryForm({ order, onRevertStatus }) {
-  const totalAmount = order.totalAmount ?? 0;
-  const [receivedAmount, setReceivedAmount] = useState(totalAmount);
+export default function LogisticDeliveryForm({
+  order,
+  onRevertStatus,
+  onDeliveryConfirm,
+}) {
+  const { id, status, totalAmount } = order;
+  const targetTotalAmount = totalAmount ?? 0;
+  const [receivedAmount, setReceivedAmount] = useState(targetTotalAmount);
   const [error, setError] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -13,32 +18,39 @@ export default function LogisticDeliveryForm({ order, onRevertStatus }) {
       setError("Received amount cannot be empty.");
       return;
     }
-    const isExact = parseFloat(receivedAmount) === parseFloat(totalAmount);
+
+    const parsedAmount = parseFloat(receivedAmount);
+    if (isNaN(parsedAmount) || parsedAmount < 0) {
+      setError("Please enter a valid non-negative number for received amount.");
+      return;
+    }
+
+    const isExact =
+      parseFloat(receivedAmount) === parseFloat(targetTotalAmount.toFixed(2));
 
     if (!isExact) {
       const proceed = window.confirm(
-        `Expected amount is $${totalAmount}, but received $${receivedAmount}. Are you sure you want to confirm?`
+        `Expected amount is $${targetTotalAmount}, but received $${receivedAmount}. Are you sure you want to confirm?`
       );
       if (!proceed) return;
     }
-
+    onDeliveryConfirm?.({
+      id,
+      status,
+      paidAmount: parsedAmount,
+      deliveredItems: order.orderItems.map((i) => i.id),
+    });
     // Proceed with confirmation (e.g., API call, dispatch action)
     alert(`Payment of $${receivedAmount} confirmed for order #${order.id}`);
   };
 
   const handleRevertStatus = async () => {
-    // if (items.length === 0) {
-    //   //alert("You must add at least one order item before confirming pickup.");
-    //   return;
-    // }
-
     try {
       setIsSubmitting(true);
       const nextStatus = ORDER_STATUSES.washingComplete;
       onRevertStatus?.(order.id, nextStatus);
     } catch (error) {
       console.error("Pickup failed:", error);
-      // alert("Something went wrong. Please try again.");
     } finally {
       setIsSubmitting(false);
     }
@@ -57,7 +69,9 @@ export default function LogisticDeliveryForm({ order, onRevertStatus }) {
 
       <div className="mb-2">
         <div className="text-sm text-gray-600">Order Total:</div>
-        <div className="font-semibold text-lg">${totalAmount.toFixed(2)}</div>
+        <div className="font-semibold text-lg">
+          ${targetTotalAmount.toFixed(2)}
+        </div>
       </div>
 
       <div className="mb-4">
@@ -93,12 +107,8 @@ export default function LogisticDeliveryForm({ order, onRevertStatus }) {
           {isSubmitting ? "Status reverting..." : "Revert Status"}
         </button>
 
-        <button
-          onClick={handleConfirm}
-          disabled={isSubmitting}
-          // className="mt-4 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 disabled:opacity-50"
-        >
-          {isSubmitting ? "Confirming..." : "Confirm Payment"}
+        <button onClick={handleConfirm} disabled={isSubmitting}>
+          {isSubmitting ? "Confirming..." : "Confirm Delivery"}
         </button>
       </ManageOrderItemsActionsContainer>
     </div>
