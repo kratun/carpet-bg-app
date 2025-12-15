@@ -233,4 +233,12 @@ export const orderService = {
     orders = orders.filter((o) => o.id !== Number(id));
     return Promise.resolve();
   },
+
+  deliveryConfirm(id, payload) {
+    const body = {
+      ...payload,
+    };
+
+    return apiFetch.put(`/orders/${id}/delivery-confirm`, { body });
+  },
 };

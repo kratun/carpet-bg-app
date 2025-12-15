@@ -26,7 +26,7 @@ export default function OrderDeliveryForm({
   const [deliveryAddress, setDeliveryAddress] = useState(
     order.deliveryAddress ?? ""
   );
-  const [sameAsPickup, setSameAsPickup] = useState(false);
+  const [sameAsPickup, setSameAsPickup] = useState(true);
 
   const handleOrderNoteChange = (value) => setOrderNote(value);
   const handleDeliveryAddressChange = (value) => setDeliveryAddress(value);
@@ -112,12 +112,19 @@ export default function OrderDeliveryForm({
       </label>
 
       {/* Same as pickup checkbox */}
-      <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          gap: "8px",
+        }}
+      >
         <input
           type="checkbox"
           id="sameAsPickup"
           checked={sameAsPickup}
           onChange={handleSameAsPickupChange}
+          disabled={true}
         />
         <label htmlFor="sameAsPickup">Същият като адреса за взимане</label>
       </div>
@@ -134,7 +141,7 @@ export default function OrderDeliveryForm({
 
       <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
         <label style={{ ...labelStyle, width: "30%" }}>
-          <p style={{ margin: "auto" }}>Дата на взимане</p>
+          <p style={{ margin: "auto" }}>Дата на доставка</p>
           <input
             type="date"
             value={deliveryDate}
