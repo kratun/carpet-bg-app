@@ -7,4 +7,7 @@ export const dateUtil = {
   today: (pattern) => {
     return dayjs().format(pattern ?? "YYYY-MM-DD");
   },
+  timeFormat: (date, pattern) => {
+    return dayjs(date).format(pattern ?? "HH:mm");
+  },
 };

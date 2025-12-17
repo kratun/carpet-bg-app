@@ -18,7 +18,7 @@ export const orderService = {
 
   getAllByStatus(status, filter = {}) {
     const {
-      search = "",
+      searchTerm = "",
       sortBy = "pickupDate",
       sortOrder = "asc",
       page = 1,
@@ -38,8 +38,9 @@ export const orderService = {
     // Destructure and set defaults
 
     // 🔍 Search (on customerName or address)
-    if (search.trim()) {
-      const term = search.trim().toLowerCase();
+    const trimmedSearchTerm = searchTerm?.trim() || undefined;
+    if (trimmedSearchTerm) {
+      const term = trimmedSearchTerm.toLowerCase();
       result = result.filter(
         (order) =>
           order.customerName?.toLowerCase().includes(term) ||

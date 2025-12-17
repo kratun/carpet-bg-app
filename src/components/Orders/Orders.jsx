@@ -4,11 +4,18 @@ import { debounce } from "lodash";
 
 import { orderService } from "../../services/orderService";
 import { getStatusDisplayName } from "../../utils/statuses.util";
+import { dateUtil } from "../../utils/date.utils";
+import { getNumberWithPrecisionAsString } from "../../utils/order.utils";
 
 import Loading from "../UI/Loading";
 import Pagination from "../UI/Pagination/Pagination";
 import Icon, { ICONS } from "../UI/Icons/Icon";
 import styles from "./Orders.module.css";
+
+const initialPaginationState = {
+  currentPage: 1,
+  totalPages: 1,
+};
 
 export default function Orders() {
   const navigate = useNavigate();
@@ -19,17 +26,23 @@ export default function Orders() {
     sortBy: "createdAt",
     sortOrder: "desc",
     pageNumber: 1,
-    pageSize: 5,
+    pageSize: 10,
     filters: {},
   });
-  const [total, setTotal] = useState(0);
+
+  const [pagination, setPagination] = useState(initialPaginationState);
   const [loading, setLoading] = useState(false);
 
   const fetchOrders = useCallback(async () => {
     setLoading(true);
-    const result = await orderService.getAll(params);
-    setOrders(result.items);
-    setTotal(result.total);
+    const { items, pageNumber, totalPages } = await orderService.getAll(params);
+    setOrders(items);
+    setPagination((prev) => ({
+      ...prev,
+      currentPage: pageNumber,
+      totalPages: totalPages,
+    }));
+
     setLoading(false);
   }, [params]);
 
@@ -37,13 +50,12 @@ export default function Orders() {
     fetchOrders();
   }, [fetchOrders]);
 
-  const totalPages = Math.ceil(total / params.pageSize);
-
   const handleSearchChange = debounce((value) => {
+    const trimmedValue = value?.trim() || null;
     setParams((prev) => ({
       ...prev,
-      search: value,
-      page: 1,
+      searchTerm: trimmedValue,
+      pageNumber: 1,
     }));
   }, 300);
 
@@ -57,7 +69,7 @@ export default function Orders() {
   };
 
   const handlePageChange = (newPage) => {
-    setParams((prev) => ({ ...prev, page: newPage }));
+    setParams((prev) => ({ ...prev, pageNumber: newPage }));
   };
 
   const isMobile = window.innerWidth <= 768;
@@ -82,11 +94,11 @@ export default function Orders() {
           <thead>
             <tr>
               <th onClick={() => handleSort("customerName")}>Phone</th>
-              <th onClick={() => handleSort("pickupDate")}>Pick up Date</th>
-              <th>Time Range</th>
-              <th>Pick up Address</th>
-              <th>Delivery Address</th>
+              <th onClick={() => handleSort("pickupDate")}>Create At</th>
+              {/* <th onClick={() => handleSort("pickupDate")}>Pick up Date</th> */}
               <th>Items</th>
+              <th>Total Amount</th>
+              <th>Address</th>
               <th>Status</th>
               <th>Actions</th>
             </tr>
@@ -107,12 +119,26 @@ export default function Orders() {
             ) : (
               orders.map((order) => (
                 <tr key={order.id}>
-                  <td>{order.customerPhoneNumber}</td>
-                  <td>{order.pickupDate}</td>
-                  <td>{order.pickupTimeRange}</td>
-                  <td>{order.pickupAddress}</td>
-                  <td>{order.deliveryAddress}</td>
-                  <td>{order.count}</td>
+                  <td>{order.phoneNumber}</td>
+                  <td>{dateUtil.format(order.createdAt)}</td>
+                  <td className={styles.textRight}>
+                    {order.orderItems.length}
+                  </td>
+                  <td className={styles.textRight}>
+                    {getNumberWithPrecisionAsString(order.totalAmount)}
+                  </td>
+                  <td>
+                    <span className={styles.tooltip}>
+                      {(order.pickupAddress || "").slice(0, 20)}
+                      {order.pickupAddress?.length > 20 && "…"}
+                      {order.pickupAddress !== order.deliveryAddress &&
+                        order.deliveryAddress?.length > 20 && (
+                          <span className={styles.tooltipText}>
+                            {order.deliveryAddress || order.pickupAddress}
+                          </span>
+                        )}
+                    </span>
+                  </td>
                   <td>{getStatusDisplayName(order.status)}</td>
                   <td>
                     <button className={styles.actionBtn}>
@@ -158,8 +184,8 @@ export default function Orders() {
       )}
 
       <Pagination
-        currentPage={params.page}
-        totalPages={totalPages}
+        currentPage={pagination.currentPage}
+        totalPages={pagination.totalPages}
         onPageChange={handlePageChange}
       />
     </div>
