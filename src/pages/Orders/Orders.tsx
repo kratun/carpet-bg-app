@@ -3,24 +3,25 @@ import { useNavigate } from "react-router-dom";
 import { debounce } from "lodash";
 
 import { orderService } from "../../services/orderService";
+import { OrderType, PaginationType } from "../../types";
 import { getStatusDisplayName } from "../../utils/statuses.util";
 import { dateUtil } from "../../utils/date.utils";
 import { getNumberWithPrecisionAsString } from "../../utils/order.utils";
 
-import Loading from "../UI/Loading";
-import Pagination from "../UI/Pagination/Pagination";
-import Icon, { ICONS } from "../UI/Icons/Icon";
+import Loading from "../../components/UI/Loading";
+import Pagination from "../../components/UI/Pagination/Pagination";
+import Icon, { ICONS } from "../../components/UI/Icons/Icon";
 import styles from "./Orders.module.css";
 
 const initialPaginationState = {
-  currentPage: 1,
+  currentPageIndex: 0,
   totalPages: 1,
 };
 
 export default function Orders() {
   const navigate = useNavigate();
 
-  const [orders, setOrders] = useState([]);
+  const [orders, setOrders] = useState<OrderType[]>([]);
   const [params, setParams] = useState({
     searchTerm: "",
     sortBy: "createdAt",
@@ -35,11 +36,12 @@ export default function Orders() {
 
   const fetchOrders = useCallback(async () => {
     setLoading(true);
-    const { items, pageNumber, totalPages } = await orderService.getAll(params);
+    const { items, pageIndex, totalPages }: PaginationType<OrderType> =
+      await orderService.getAll(params);
     setOrders(items);
     setPagination((prev) => ({
       ...prev,
-      currentPage: pageNumber,
+      currentPageIndex: pageIndex,
       totalPages: totalPages,
     }));
 
@@ -59,7 +61,7 @@ export default function Orders() {
     }));
   }, 300);
 
-  const handleSort = (field) => {
+  const handleSort = (field: string) => {
     setParams((prev) => ({
       ...prev,
       sortBy: field,
@@ -68,12 +70,12 @@ export default function Orders() {
     }));
   };
 
-  const handlePageChange = (newPage) => {
-    setParams((prev) => ({ ...prev, pageNumber: newPage }));
+  const handlePageChange = (nextPageIndex: Number) => {
+    setParams((prev) => ({ ...prev, pageIndex: nextPageIndex }));
   };
 
   const isMobile = window.innerWidth <= 768;
-  function handleQuickView(order) {
+  function handleQuickView(order: OrderType) {
     navigate(`/orders/${order.id}`);
     console.log(order);
   }
@@ -106,18 +108,16 @@ export default function Orders() {
           <tbody>
             {loading ? (
               <tr>
-                <td colSpan="6" className={styles.center}>
+                <td className={styles.center}>
                   <Loading />
                 </td>
               </tr>
             ) : orders.length === 0 ? (
               <tr>
-                <td colSpan="8" className={styles.center}>
-                  Няма намерени поръчки
-                </td>
+                <td className={styles.center}>Няма намерени поръчки</td>
               </tr>
             ) : (
-              orders.map((order) => (
+              orders.map((order: OrderType) => (
                 <tr key={order.id}>
                   <td>{order.phoneNumber}</td>
                   <td>{dateUtil.format(order.createdAt)}</td>
@@ -152,7 +152,7 @@ export default function Orders() {
         </table>
       ) : (
         <div className={styles.cards}>
-          {orders.map((order, idx) => (
+          {orders.map((order: OrderType, idx: number) => (
             <div key={idx} className={styles.card}>
               <p>
                 <strong>Клиент:</strong> {order.customerName}
@@ -167,7 +167,7 @@ export default function Orders() {
                 <strong>Адрес:</strong> {order.pickupAddress}
               </p>
               <p>
-                <strong>Брой:</strong> {order.count}
+                <strong>Брой:</strong> {order.orderItems.length} артикула
               </p>
               <p>
                 <strong>Статус:</strong> {getStatusDisplayName(order.status)}
@@ -184,7 +184,7 @@ export default function Orders() {
       )}
 
       <Pagination
-        currentPage={pagination.currentPage}
+        currentPageIndex={pagination.currentPageIndex}
         totalPages={pagination.totalPages}
         onPageChange={handlePageChange}
       />

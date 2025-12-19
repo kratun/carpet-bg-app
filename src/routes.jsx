@@ -4,8 +4,8 @@ import Loading from "./components/UI/Loading";
 const Customers = lazy(() => import("./components/Customers/Customers"));
 
 const OrdersLayout = lazy(() => import("./components/Orders/OrdersLayout"));
-const Order = lazy(() => import("./components/Orders/Order"));
-const Orders = lazy(() => import("./components/Orders/Orders"));
+const Order = lazy(() => import("./pages/Order/Order"));
+const Orders = lazy(() => import("./pages/Orders/Orders"));
 const LogisticOrders = lazy(() =>
   import("./components/Orders/OrderManager/LogisticOrders/LogisticOrders")
 );

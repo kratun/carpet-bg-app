@@ -22,7 +22,7 @@ export default function OrderDeliveryForm({
 }) {
   const [deliveryDate, setDeliveryDate] = useState(today);
   const [deliveryTimeRange, setDeliveryTimeRange] = useState(timeRanges[0]);
-  const [orderNote, setOrderNote] = useState(order.orderNote ?? "");
+  const [orderNote, setOrderNote] = useState(order.note ?? "");
   const [deliveryAddress, setDeliveryAddress] = useState(
     order.deliveryAddress ?? ""
   );
@@ -172,11 +172,14 @@ export default function OrderDeliveryForm({
         </label>
       </div>
 
-      <SpeechTextarea
-        id="order-note"
-        value={orderNote}
-        onChange={handleOrderNoteChange}
-      />
+      <label style={labelStyle}>
+        Бележка
+        <SpeechTextarea
+          id="order-note"
+          value={orderNote}
+          onChange={handleOrderNoteChange}
+        />
+      </label>
 
       <div style={actionContainerStyle}>
         <button
