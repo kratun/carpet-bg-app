@@ -12,7 +12,7 @@ import Pagination from "../../../UI/Pagination/Pagination.jsx";
 
 export default function LogisticOrders() {
   const [searchTerm, setSearchTerm] = useState("");
-  const [pageNumber, setPageNumber] = useState(1);
+  const [pageIndex, setPageIndex] = useState(0);
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(false);
   const [total, setTotal] = useState(0);
@@ -28,11 +28,12 @@ export default function LogisticOrders() {
       deliveryDate: today,
       pageSize: 10,
       searchTerm,
-      pageNumber,
+      pageIndex,
     };
-  }, [searchTerm, pageNumber]);
+  }, [searchTerm, pageIndex]);
 
   const totalPages = Math.ceil(total / queryParams.pageSize);
+  const showPagination = !!queryParams.pageIndex && !!totalPages;
 
   const fetchOrders = useCallback(async () => {
     setLoading(true);
@@ -44,7 +45,7 @@ export default function LogisticOrders() {
 
       const result = await orderService.getAll(queryParams);
       setOrders(result.items);
-      setPageNumber(result.pageNumber);
+      setPageIndex(result.pageIndex);
       setTotal(result.totalCount);
     } catch (err) {
       console.error("Failed to fetch orders:", err);
@@ -82,8 +83,8 @@ export default function LogisticOrders() {
     }
   };
 
-  const handlePageChange = (newPage) => {
-    setPageNumber(newPage);
+  const handlePageChange = (newPageIndex) => {
+    setPageIndex(newPageIndex);
   };
 
   const handleAddOrderItem = async (item, orderId) => {
@@ -178,11 +179,13 @@ export default function LogisticOrders() {
         }
       />
 
-      <Pagination
-        currentPage={queryParams.pageNumber}
-        totalPages={totalPages}
-        onPageChange={handlePageChange}
-      />
+      {showPagination && (
+        <Pagination
+          currentPageIndex={queryParams.pageIndex}
+          totalPages={totalPages}
+          onPageChange={handlePageChange}
+        />
+      )}
     </div>
   );
 }

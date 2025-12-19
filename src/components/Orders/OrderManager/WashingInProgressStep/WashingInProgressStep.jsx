@@ -19,10 +19,10 @@ export default function WashingInProgressStep() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(false);
   const [params, setParams] = useState({
-    search: "",
+    searchTerm: "",
     sortBy: "pickupDate",
     sortOrder: "asc",
-    page: 1,
+    pageIndex: 0,
     limit: 5,
     filters: {},
   });
@@ -32,6 +32,7 @@ export default function WashingInProgressStep() {
 
   const fetchOrders = useCallback(async () => {
     setLoading(true);
+    // TODO combine with whenall if relevant
     const productList = await productService.getAll();
     if (productList && productList.length > 0) {
       setProducts(productList);
@@ -42,7 +43,7 @@ export default function WashingInProgressStep() {
     });
 
     setOrders(result.items || []);
-    setTotal(result.total);
+    setTotal(result.totalCount);
     setLoading(false);
   }, []);
 
@@ -52,45 +53,20 @@ export default function WashingInProgressStep() {
 
   const keyFn = (order) => order.id;
 
-  const handlePageChange = (newPage) => {
-    setParams((prev) => ({ ...prev, page: newPage }));
+  const handlePageChange = (nextPageIndex) => {
+    setParams((prev) => ({ ...prev, pageIndex: nextPageIndex }));
   };
 
   const handleSearchChange = useCallback((term) => {
-    setParams((prev) => ({ ...prev, search: term }));
+    setParams((prev) => ({ ...prev, searchTerm: term }));
   }, []);
-
-  //  const handleEditItem = (id, updatedItem) => {
-  //   setOrders((prev) =>
-  //   {
-  //     const orders = [...prev];
-  //     const order = orders.find(o=>o.id===id);
-
-  //     if(!order){
-  //       return;
-  //     }
-
-  //     const orderItems = order.orderItems ?? [];
-  //     const orderItem = order.orderItems.find(oi=>oi.id===updatedItem.id);
-
-  //     if(!orderItem){
-  //       return;
-  //     }
-
-  //     const nextOrderItem = {...orderItem, status: ORDER_ITEM_STATUSES.washingComplete };
-
-  //     order.orderItems = orderItems;
-
-  //     return orders;
-  //   }
-  //   );
-  // };
 
   const handleEditItem = async (id, item) => {
     const updatedItem = {
       ...item,
       status: ORDER_ITEM_STATUSES.washingComplete,
     };
+
     await orderService.updateOrderItem(id, updatedItem);
 
     setOrders((prevOrders) =>
@@ -156,7 +132,7 @@ export default function WashingInProgressStep() {
 
       <SearchableAccordion
         items={orders}
-        // search={search}
+        search={params.searchTerm}
         onSearchChange={handleSearchChange}
         itemKeyFn={keyFn}
         renderContent={(order) => {
@@ -224,7 +200,7 @@ export default function WashingInProgressStep() {
       /> */}
 
       <Pagination
-        currentPage={params.page}
+        currentPageIndex={params.pageIndex}
         totalPages={totalPages}
         onPageChange={handlePageChange}
       />

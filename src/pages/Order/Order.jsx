@@ -2,18 +2,18 @@ import { useState, useEffect } from "react";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { dateUtil } from "../../utils/date.utils.js";
 
-import { customerService } from "../../services/customerService";
-import { orderService } from "../../services/orderService";
-import { productService } from "../../services/productService";
-import { useToastContext } from "../../stores/ToastContext";
+import { customerService } from "../../services/customerService.js";
+import { orderService } from "../../services/orderService.js";
+import { productService } from "../../services/productService.js";
+import { useToastContext } from "../../stores/ToastContext.jsx";
 
 import { ORDER_STATUSES } from "../../utils/statuses.util.js";
-import Icon, { ICONS } from "../UI/Icons/Icon.jsx";
+import Icon, { ICONS } from "../../components/UI/Icons/Icon.jsx";
 
-import SpeechTextarea from "../UI/SpeechTextarea/SpeechTextarea.jsx";
-import OrderItemBaseInputData from "./OrderItemBaseInputData.jsx";
-import ManageOrderItems from "./OrderManager/ManageOrderItems/ManageOrderItems.jsx";
-import ManageOrderItemsActionsContainer from "./OrderManager/ManageOrderItems/ManageOrderItemsActionsContainer.jsx";
+import SpeechTextarea from "../../components/UI/SpeechTextarea/SpeechTextarea.jsx";
+import OrderItemBaseInputData from "../../components/Orders/OrderItemBaseInputData.jsx";
+import ManageOrderItems from "../../components/Orders/OrderManager/ManageOrderItems/ManageOrderItems.jsx";
+import ManageOrderItemsActionsContainer from "../../components/Orders/OrderManager/ManageOrderItems/ManageOrderItemsActionsContainer.jsx";
 
 //const today = dayjs().format("YYYY-MM-DD");
 

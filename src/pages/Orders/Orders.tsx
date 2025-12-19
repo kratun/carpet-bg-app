@@ -3,33 +3,48 @@ import { useNavigate } from "react-router-dom";
 import { debounce } from "lodash";
 
 import { orderService } from "../../services/orderService";
+import { OrderType, PaginationType } from "../../types";
 import { getStatusDisplayName } from "../../utils/statuses.util";
+import { dateUtil } from "../../utils/date.utils";
+import { getNumberWithPrecisionAsString } from "../../utils/order.utils";
 
-import Loading from "../UI/Loading";
-import Pagination from "../UI/Pagination/Pagination";
-import Icon, { ICONS } from "../UI/Icons/Icon";
+import Loading from "../../components/UI/Loading";
+import Pagination from "../../components/UI/Pagination/Pagination";
+import Icon, { ICONS } from "../../components/UI/Icons/Icon";
 import styles from "./Orders.module.css";
+
+const initialPaginationState = {
+  currentPageIndex: 0,
+  totalPages: 1,
+};
 
 export default function Orders() {
   const navigate = useNavigate();
 
-  const [orders, setOrders] = useState([]);
+  const [orders, setOrders] = useState<OrderType[]>([]);
   const [params, setParams] = useState({
     searchTerm: "",
     sortBy: "createdAt",
     sortOrder: "desc",
     pageNumber: 1,
-    pageSize: 5,
+    pageSize: 10,
     filters: {},
   });
-  const [total, setTotal] = useState(0);
+
+  const [pagination, setPagination] = useState(initialPaginationState);
   const [loading, setLoading] = useState(false);
 
   const fetchOrders = useCallback(async () => {
     setLoading(true);
-    const result = await orderService.getAll(params);
-    setOrders(result.items);
-    setTotal(result.total);
+    const { items, pageIndex, totalPages }: PaginationType<OrderType> =
+      await orderService.getAll(params);
+    setOrders(items);
+    setPagination((prev) => ({
+      ...prev,
+      currentPageIndex: pageIndex,
+      totalPages: totalPages,
+    }));
+
     setLoading(false);
   }, [params]);
 
@@ -37,17 +52,16 @@ export default function Orders() {
     fetchOrders();
   }, [fetchOrders]);
 
-  const totalPages = Math.ceil(total / params.pageSize);
-
   const handleSearchChange = debounce((value) => {
+    const trimmedValue = value?.trim() || null;
     setParams((prev) => ({
       ...prev,
-      search: value,
-      page: 1,
+      searchTerm: trimmedValue,
+      pageNumber: 1,
     }));
   }, 300);
 
-  const handleSort = (field) => {
+  const handleSort = (field: string) => {
     setParams((prev) => ({
       ...prev,
       sortBy: field,
@@ -56,12 +70,12 @@ export default function Orders() {
     }));
   };
 
-  const handlePageChange = (newPage) => {
-    setParams((prev) => ({ ...prev, page: newPage }));
+  const handlePageChange = (nextPageIndex: Number) => {
+    setParams((prev) => ({ ...prev, pageIndex: nextPageIndex }));
   };
 
   const isMobile = window.innerWidth <= 768;
-  function handleQuickView(order) {
+  function handleQuickView(order: OrderType) {
     navigate(`/orders/${order.id}`);
     console.log(order);
   }
@@ -82,11 +96,11 @@ export default function Orders() {
           <thead>
             <tr>
               <th onClick={() => handleSort("customerName")}>Phone</th>
-              <th onClick={() => handleSort("pickupDate")}>Pick up Date</th>
-              <th>Time Range</th>
-              <th>Pick up Address</th>
-              <th>Delivery Address</th>
+              <th onClick={() => handleSort("pickupDate")}>Create At</th>
+              {/* <th onClick={() => handleSort("pickupDate")}>Pick up Date</th> */}
               <th>Items</th>
+              <th>Total Amount</th>
+              <th>Address</th>
               <th>Status</th>
               <th>Actions</th>
             </tr>
@@ -94,25 +108,37 @@ export default function Orders() {
           <tbody>
             {loading ? (
               <tr>
-                <td colSpan="6" className={styles.center}>
+                <td className={styles.center}>
                   <Loading />
                 </td>
               </tr>
             ) : orders.length === 0 ? (
               <tr>
-                <td colSpan="8" className={styles.center}>
-                  Няма намерени поръчки
-                </td>
+                <td className={styles.center}>Няма намерени поръчки</td>
               </tr>
             ) : (
-              orders.map((order) => (
+              orders.map((order: OrderType) => (
                 <tr key={order.id}>
-                  <td>{order.customerPhoneNumber}</td>
-                  <td>{order.pickupDate}</td>
-                  <td>{order.pickupTimeRange}</td>
-                  <td>{order.pickupAddress}</td>
-                  <td>{order.deliveryAddress}</td>
-                  <td>{order.count}</td>
+                  <td>{order.phoneNumber}</td>
+                  <td>{dateUtil.format(order.createdAt)}</td>
+                  <td className={styles.textRight}>
+                    {order.orderItems.length}
+                  </td>
+                  <td className={styles.textRight}>
+                    {getNumberWithPrecisionAsString(order.totalAmount)}
+                  </td>
+                  <td>
+                    <span className={styles.tooltip}>
+                      {(order.pickupAddress || "").slice(0, 20)}
+                      {order.pickupAddress?.length > 20 && "…"}
+                      {order.pickupAddress !== order.deliveryAddress &&
+                        order.deliveryAddress?.length > 20 && (
+                          <span className={styles.tooltipText}>
+                            {order.deliveryAddress || order.pickupAddress}
+                          </span>
+                        )}
+                    </span>
+                  </td>
                   <td>{getStatusDisplayName(order.status)}</td>
                   <td>
                     <button className={styles.actionBtn}>
@@ -126,7 +152,7 @@ export default function Orders() {
         </table>
       ) : (
         <div className={styles.cards}>
-          {orders.map((order, idx) => (
+          {orders.map((order: OrderType, idx: number) => (
             <div key={idx} className={styles.card}>
               <p>
                 <strong>Клиент:</strong> {order.customerName}
@@ -141,7 +167,7 @@ export default function Orders() {
                 <strong>Адрес:</strong> {order.pickupAddress}
               </p>
               <p>
-                <strong>Брой:</strong> {order.count}
+                <strong>Брой:</strong> {order.orderItems.length} артикула
               </p>
               <p>
                 <strong>Статус:</strong> {getStatusDisplayName(order.status)}
@@ -158,8 +184,8 @@ export default function Orders() {
       )}
 
       <Pagination
-        currentPage={params.page}
-        totalPages={totalPages}
+        currentPageIndex={pagination.currentPageIndex}
+        totalPages={pagination.totalPages}
         onPageChange={handlePageChange}
       />
     </div>
