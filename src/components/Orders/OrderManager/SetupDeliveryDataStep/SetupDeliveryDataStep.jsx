@@ -1,18 +1,17 @@
 import { useState, useCallback, useEffect } from "react";
-import dayjs from "dayjs";
 
 import { orderService } from "../../../../services/orderService";
 import { useToastContext } from "../../../../stores/ToastContext";
-import { ORDER_STATUSES } from "../../../../utils/statuses.util.js";
+import { ORDER_STATUSES } from "../../../../utils/statuses.utils.js";
 
 import SearchableAccordion from "../../../Accordion/SearchableAccordion.jsx";
 
 import Pagination from "../../../UI/Pagination/Pagination.jsx";
 import OrderDeliveryForm from "./OrderDeliveryForm.jsx";
+import { dateUtil } from "../../../../utils/date.utils.js";
 
 export default function SetupDeliveryDataStep() {
-  const today = dayjs().startOf("day");
-  const formattedToday = today.format("YYYY-MM-DD");
+  const formattedToday = dateUtil.getCurrentDateFormatted();
   const { toastSuccess, toastError, toastCustom } = useToastContext();
 
   const [params, setParams] = useState({

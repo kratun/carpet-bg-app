@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ORDER_STATUSES } from "../../../../utils/statuses.util.js";
+import { ORDER_STATUSES } from "../../../../utils/statuses.utils.js";
 import ManageOrderItemsActionsContainer from "../ManageOrderItems/ManageOrderItemsActionsContainer";
 
 export default function LogisticDeliveryForm({

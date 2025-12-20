@@ -1,7 +1,7 @@
 import { useState } from "react";
 import Icon, { ICONS } from "../../../UI/Icons/Icon";
 
-import { ORDER_STATUSES } from "../../../../utils/statuses.util.js";
+import { ORDER_STATUSES } from "../../../../utils/statuses.utils.js";
 
 import ManageOrderItems from "../ManageOrderItems/ManageOrderItems";
 import ManageOrderItemsActionsContainer from "../ManageOrderItems/ManageOrderItemsActionsContainer";

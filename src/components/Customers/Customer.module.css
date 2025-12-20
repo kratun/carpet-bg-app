@@ -1,0 +1,72 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  border: 2px solid #2563eb;
+  border-radius: 4px;
+  padding: 0 16px 16px;
+  background-color: #f8faff;
+}
+
+/* Labels */
+.label {
+  display: block;
+  font-weight: 600;
+  color: #2d7dbf;
+}
+
+/* Inputs */
+.input,
+.textarea {
+  width: 100%;
+  padding: 8px;
+  font-size: 16px;
+  border-radius: 4px;
+  border: 1px solid #2563eb;
+  box-sizing: border-box;
+  margin-top: 4px;
+  font-family: inherit;
+}
+
+.textarea {
+  resize: vertical;
+}
+
+.inputError {
+  border: 2px solid red;
+}
+
+/* Errors */
+.errorText {
+  color: red;
+  font-size: 0.875rem;
+  margin-top: 4px;
+}
+
+/* Actions */
+.actions {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.button {
+  background-color: #2d7dbf;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 10px 16px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.cancelButton {
+  background-color: transparent;
+  color: #2d7dbf;
+}

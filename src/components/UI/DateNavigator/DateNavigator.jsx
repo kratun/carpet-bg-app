@@ -1,19 +1,19 @@
-import dayjs from "dayjs";
+import { dateUtil } from "../../../utils";
 import styles from "./DateNavigator.module.css";
 
 export default function DatePickerControl({ selectedDate, onChange }) {
-  const today = dayjs().startOf("day");
+  const today = dateUtil.getCurrentDateFormatted("YYYY-MM-DD");
 
   const handleDateChange = (e) => {
     onChange(e.target.value);
   };
 
   const incrementDate = () => {
-    onChange(dayjs(selectedDate).add(1, "day").format("YYYY-MM-DD"));
+    onChange(dateUtil.incrementDay(selectedDate, 1));
   };
 
   const decrementDate = () => {
-    const newDate = dayjs(selectedDate).subtract(1, "day");
+    const newDate = dateUtil.decrementDate(selectedDate, 1);
     if (newDate.isBefore(today, "day")) {
       return;
     }
@@ -25,7 +25,7 @@ export default function DatePickerControl({ selectedDate, onChange }) {
     <div className={styles.dateControls}>
       <button
         onClick={decrementDate}
-        disabled={!dayjs(selectedDate, "YYYY-MM-DD").isAfter(today, "day")}
+        disabled={!dateUtil.isAfter(selectedDate, today)}
       >
         ← Предишен ден
       </button>

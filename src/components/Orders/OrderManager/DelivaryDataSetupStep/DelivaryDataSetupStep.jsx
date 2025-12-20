@@ -1,25 +1,12 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import dayjs from "dayjs";
 
 import { customerService } from "../../services/customerService";
 import { orderService } from "../../services/orderService";
 import { ORDER_STATUSES } from "../../utils/statuses.util.js";
 
 import { useToastContext } from "../../stores/ToastContext";
-
-const today = dayjs().format("YYYY-MM-DD");
-
-// Predefined time ranges
-const timeRanges = [
-  "09:00 - 10:00",
-  "10:00 - 11:30",
-  "11:30 - 13:00",
-  "13:00 - 14:30",
-  "14:30 - 16:00",
-  "16:00 - 17:30",
-  "17:30 - 19:00",
-];
+import { dateUtil, timeRanges } from "../../../../utils";
 
 export default function DeliveryDataSetupStep() {
   const navigate = useNavigate();
@@ -42,6 +29,9 @@ export default function DeliveryDataSetupStep() {
     phoneNumber: "",
     displayAddress: "",
   });
+
+  const today = dateUtil.getCurrentDateFormatted();
+
   const [pickupDate, setPickupDate] = useState(today);
   const [pickupTimeRange, setPickupTimeRange] = useState(timeRanges[0]);
   const [count, setCount] = useState(1);
@@ -104,7 +94,7 @@ export default function DeliveryDataSetupStep() {
       customerId: customer.id,
       customerName: customer.name,
       pickupAddress: customer.displayAddress,
-      pickupDate: dayjs(pickupDate).format("YYYY-MM-DD"),
+      pickupDate: dateUtil.format(pickupDate, "YYYY-MM-DD"),
       pickupTimeRange,
       count: Number(count),
       width: width ? Number(width) : null,

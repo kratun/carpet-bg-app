@@ -67,7 +67,8 @@ export default function OrderItemBaseInputData({
     }
 
     if (isPositiveNumber(d)) {
-      const total = +(d * d * Math.PI * price);
+      const radius = d / 2;
+      const total = +(radius * radius * Math.PI * price);
 
       return total;
     }

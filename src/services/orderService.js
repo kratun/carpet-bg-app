@@ -1,5 +1,5 @@
 import { apiFetch } from "./apiClient";
-import { ORDER_STATUSES } from "../utils/statuses.util.js";
+import { ORDER_STATUSES } from "../utils/statuses.utils.js";
 
 let orders = []; // In-memory order list
 

@@ -2,7 +2,7 @@
 
 import Icon, { ICONS } from "../../../UI/Icons/Icon";
 
-import { ORDER_ITEM_STATUSES } from "../../../../utils/statuses.util";
+import { ORDER_ITEM_STATUSES } from "../../../../utils/statuses.utils";
 
 export default function ManageOrderItems({
   title,

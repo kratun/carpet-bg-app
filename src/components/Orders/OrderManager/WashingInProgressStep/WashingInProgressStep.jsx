@@ -5,7 +5,7 @@ import { productService } from "../../../../services/productService.js";
 import {
   ORDER_STATUSES,
   ORDER_ITEM_STATUSES,
-} from "../../../../utils/statuses.util.js";
+} from "../../../../utils/statuses.utils.js";
 
 import styles from "./WashingInProgressStep.module.css";
 import Pagination from "../../../UI/Pagination/Pagination.jsx";

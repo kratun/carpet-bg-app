@@ -1,13 +1,13 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
-import { dateUtil } from "../../utils/date.utils.js";
+import { dateUtil, timeRanges } from "../../utils/date.utils.js";
 
 import { customerService } from "../../services/customerService.js";
 import { orderService } from "../../services/orderService.js";
 import { productService } from "../../services/productService.js";
 import { useToastContext } from "../../stores/ToastContext.jsx";
 
-import { ORDER_STATUSES } from "../../utils/statuses.util.js";
+import { ORDER_STATUSES } from "../../utils/statuses.utils.js";
 import Icon, { ICONS } from "../../components/UI/Icons/Icon.jsx";
 
 import SpeechTextarea from "../../components/UI/SpeechTextarea/SpeechTextarea.jsx";
@@ -15,20 +15,8 @@ import OrderItemBaseInputData from "../../components/Orders/OrderItemBaseInputDa
 import ManageOrderItems from "../../components/Orders/OrderManager/ManageOrderItems/ManageOrderItems.jsx";
 import ManageOrderItemsActionsContainer from "../../components/Orders/OrderManager/ManageOrderItems/ManageOrderItemsActionsContainer.jsx";
 
-//const today = dayjs().format("YYYY-MM-DD");
-
-const timeRanges = [
-  "09:00 - 10:00",
-  "10:00 - 11:30",
-  "11:30 - 13:00",
-  "13:00 - 14:30",
-  "14:30 - 16:00",
-  "16:00 - 17:30",
-  "17:30 - 19:00",
-];
-
 export default function Order() {
-  const today = dateUtil.today();
+  const today = dateUtil.getCurrentDateFormatted();
   const navigate = useNavigate();
   const { id } = useParams();
   const [searchParams] = useSearchParams();

@@ -144,13 +144,13 @@ export const customerService = {
 
   async getCustomerAddresses({
     searchTerm = "",
-    pageNumber = 1,
+    pageIndex = 0,
     pageSize = 10,
   } = {}) {
     const params = {
-      searchTerm: searchTerm.trim(),
-      pageNumber: pageNumber,
-      pageSize: pageSize,
+      searchTerm,
+      pageIndex,
+      pageSize,
     };
 
     return apiFetch.get("/addresses", { params });

@@ -2,7 +2,7 @@ import { useState, useCallback, useEffect, useMemo } from "react";
 
 import { orderService } from "../../../../services/orderService.js";
 import { productService } from "../../../../services/productService";
-import { ORDER_STATUSES } from "../../../../utils/statuses.util.js";
+import { ORDER_STATUSES } from "../../../../utils/statuses.utils.js";
 import { dateUtil } from "../../../../utils/date.utils.js";
 
 import SearchableAccordion from "../../../Accordion/SearchableAccordion";
@@ -19,7 +19,7 @@ export default function LogisticOrders() {
   const [products, setProducts] = useState([]);
 
   const queryParams = useMemo(() => {
-    const today = dateUtil.today();
+    const today = dateUtil.getCurrentDateFormatted();
     return {
       sortBy: "createdAt",
       sortDirection: "asc",

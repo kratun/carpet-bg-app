@@ -1,18 +1,33 @@
-export const ORDER_STATUSES = {
+// orderStatuses.utils.ts
+
+/* =========================
+   Order statuses
+========================= */
+
+export type OrderStatus =
+  | "new"
+  | "pendingPickup"
+  | "pickupComplete"
+  | "washingInProgress"
+  | "washingComplete"
+  | "pendingDelivery"
+  | "deliveryComplete"
+  | "completed"
+  | "cancelled";
+
+export const ORDER_STATUSES: Record<OrderStatus, OrderStatus> = {
   new: "new",
-  // readyForPickup: "readyForPickup",
   pendingPickup: "pendingPickup",
   pickupComplete: "pickupComplete",
   washingInProgress: "washingInProgress",
   washingComplete: "washingComplete",
-  //readyForDelivery: "readyForDelivery",
   pendingDelivery: "pendingDelivery",
   deliveryComplete: "deliveryComplete",
   completed: "completed",
   cancelled: "cancelled",
 };
 
-export function getStatusDisplayName(status) {
+export function getStatusDisplayName(status: OrderStatus): string {
   switch (status) {
     case ORDER_STATUSES.new:
       return "Нова";
@@ -37,14 +52,24 @@ export function getStatusDisplayName(status) {
   }
 }
 
-export const ORDER_ITEM_STATUSES = {
+/* =========================
+   Order item statuses
+========================= */
+
+export type OrderItemStatus =
+  | "new"
+  | "washingInProgress"
+  | "washingComplete"
+  | "deleted";
+
+export const ORDER_ITEM_STATUSES: Record<OrderItemStatus, OrderItemStatus> = {
   new: "new",
   washingInProgress: "washingInProgress",
   washingComplete: "washingComplete",
   deleted: "deleted",
 };
 
-export function getOrderItemStatusDisplayName(status) {
+export function getOrderItemStatusDisplayName(status: OrderItemStatus): string {
   switch (status) {
     case ORDER_ITEM_STATUSES.new:
       return "Нова";

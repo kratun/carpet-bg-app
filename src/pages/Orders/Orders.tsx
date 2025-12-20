@@ -4,7 +4,7 @@ import { debounce } from "lodash";
 
 import { orderService } from "../../services/orderService";
 import { OrderType, PaginationType } from "../../types";
-import { getStatusDisplayName } from "../../utils/statuses.util";
+import { getStatusDisplayName } from "../../utils/statuses.utils";
 import { dateUtil } from "../../utils/date.utils";
 import { getNumberWithPrecisionAsString } from "../../utils/order.utils";
 

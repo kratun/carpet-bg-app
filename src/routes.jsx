@@ -1,7 +1,7 @@
 import { lazy, Suspense } from "react";
 import Loading from "./components/UI/Loading";
 
-const Customers = lazy(() => import("./components/Customers/Customers"));
+const Customers = lazy(() => import("./pages/Customers/Customers"));
 
 const OrdersLayout = lazy(() => import("./components/Orders/OrdersLayout"));
 const Order = lazy(() => import("./pages/Order/Order"));

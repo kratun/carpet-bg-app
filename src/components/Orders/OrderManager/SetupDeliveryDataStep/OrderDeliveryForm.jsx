@@ -1,18 +1,6 @@
 import { useState } from "react";
-import dayjs from "dayjs";
 import SpeechTextarea from "../../../UI/SpeechTextarea/SpeechTextarea";
-
-const today = dayjs().format("YYYY-MM-DD");
-
-const timeRanges = [
-  "09:00 - 10:00",
-  "10:00 - 11:30",
-  "11:30 - 13:00",
-  "13:00 - 14:30",
-  "14:30 - 16:00",
-  "16:00 - 17:30",
-  "17:30 - 19:00",
-];
+import { dateUtil, timeRanges } from "../../../../utils";
 
 export default function OrderDeliveryForm({
   isDelivery,
@@ -20,6 +8,7 @@ export default function OrderDeliveryForm({
   onSave,
   onBack,
 }) {
+  const today = dateUtil.getCurrentDateFormatted("YYYY-MM-DD");
   const [deliveryDate, setDeliveryDate] = useState(today);
   const [deliveryTimeRange, setDeliveryTimeRange] = useState(timeRanges[0]);
   const [orderNote, setOrderNote] = useState(order.note ?? "");

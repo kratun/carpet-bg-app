@@ -1,10 +1,9 @@
 import { useState, useCallback, useEffect } from "react";
-//import dayjs from "dayjs";
 import { orderService } from "../../../../services/orderService.js";
 import {
   ORDER_STATUSES,
   getStatusDisplayName,
-} from "../../../../utils/statuses.util.js";
+} from "../../../../utils/statuses.utils.js";
 import { dateUtil } from "../../../../utils/date.utils.js";
 
 import Loading from "../../../UI/Loading.jsx";
@@ -13,7 +12,7 @@ import DatePickerControl from "../../../UI/DateNavigator/DateNavigator.jsx";
 import styles from "./ArrangePickupStep.module.css";
 
 export default function ArrangePickUpStep() {
-  const today = dateUtil.today();
+  const today = dateUtil.getCurrentDateFormatted();
   const [selectedDate, setSelectedDate] = useState(today);
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(false);
