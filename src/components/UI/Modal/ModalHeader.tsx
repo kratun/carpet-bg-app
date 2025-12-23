@@ -1,14 +1,14 @@
 import styles from "./ModalHeader.module.css";
 
 export type ModalHeaderProps = {
-  title: string;
+  title: string | undefined;
   onClose: () => void;
 };
 
 export default function ModalHeader({ title, onClose }: ModalHeaderProps) {
   return (
     <div className={styles.container}>
-      <p>{title}</p>
+      {title && <p>{title}</p>}
       <button
         onClick={onClose}
         className={styles.closeButton}

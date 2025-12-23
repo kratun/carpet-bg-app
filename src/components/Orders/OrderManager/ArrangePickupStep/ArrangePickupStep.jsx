@@ -1,15 +1,13 @@
 import { useState, useCallback, useEffect } from "react";
 import { orderService } from "../../../../services/orderService.js";
-import {
-  ORDER_STATUSES,
-  getStatusDisplayName,
-} from "../../../../utils/statuses.utils.js";
+import { getStatusDisplayName } from "../../../../utils/statuses.utils.js";
 import { dateUtil } from "../../../../utils/date.utils.js";
 
 import Loading from "../../../UI/Loading.jsx";
 import { DndSortableList } from "../../../DragAndDropList/DragAndDropSortableList.jsx";
 import DatePickerControl from "../../../UI/DateNavigator/DateNavigator.jsx";
 import styles from "./ArrangePickupStep.module.css";
+import { OrderStatuses } from "../../../../types/order.type.js";
 
 export default function ArrangePickUpStep() {
   const today = dateUtil.getCurrentDateFormatted();
@@ -24,7 +22,7 @@ export default function ArrangePickUpStep() {
       sortOrder: "adc",
       pageNumber: 1,
       pageSize: 0,
-      statuses: [ORDER_STATUSES.pendingPickup, ORDER_STATUSES.pendingDelivery],
+      statuses: [OrderStatuses.pendingPickup, OrderStatuses.pendingDelivery],
       pickupDate: selectedDate,
     };
     const result = await orderService.getAllByStatuses(filter);
@@ -55,8 +53,8 @@ export default function ArrangePickUpStep() {
   };
 
   const renderItem = (order) => {
-    const isPickupStatus = order.status === ORDER_STATUSES.pendingPickup;
-    const isDeliveryStatus = order.status === ORDER_STATUSES.pendingDelivery;
+    const isPickupStatus = order.status === OrderStatuses.pendingPickup;
+    const isDeliveryStatus = order.status === OrderStatuses.pendingDelivery;
     let address = "";
     let timeRange = "";
 
@@ -73,8 +71,8 @@ export default function ArrangePickUpStep() {
     return (
       <div className={styles.card}>
         {order.orderBy && <div className={styles.index}>{order.orderBy}</div>}
-        {(order.status === ORDER_STATUSES.pendingPickup ||
-          order.status === ORDER_STATUSES.pendingDelivery) && (
+        {(order.status === OrderStatuses.pendingPickup ||
+          order.status === OrderStatuses.pendingDelivery) && (
           <div className={styles.cardContent}>
             <div className={styles.contentItem}>
               <div>Име: {order.userFullName}</div>

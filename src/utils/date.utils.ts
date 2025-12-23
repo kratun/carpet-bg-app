@@ -41,7 +41,7 @@ export const dateUtil: DateUtil = {
   },
 };
 
-export const timeRanges: string[] = [
+export const timeRanges = [
   "09:00 - 10:00",
   "10:00 - 11:30",
   "11:30 - 13:00",
@@ -49,4 +49,6 @@ export const timeRanges: string[] = [
   "14:30 - 16:00",
   "16:00 - 17:30",
   "17:30 - 19:00",
-];
+] as const;
+
+export type TimeRange = (typeof timeRanges)[number];

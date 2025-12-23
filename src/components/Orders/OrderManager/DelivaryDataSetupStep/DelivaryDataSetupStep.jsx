@@ -3,10 +3,11 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 
 import { customerService } from "../../services/customerService";
 import { orderService } from "../../services/orderService";
-import { ORDER_STATUSES } from "../../utils/statuses.util.js";
-
 import { useToastContext } from "../../stores/ToastContext";
 import { dateUtil, timeRanges } from "../../../../utils";
+import { OrderStatuses } from "../../types";
+
+// TODO REMOVE IF NOT USED
 
 export default function DeliveryDataSetupStep() {
   const navigate = useNavigate();
@@ -100,7 +101,7 @@ export default function DeliveryDataSetupStep() {
       width: width ? Number(width) : null,
       height: height ? Number(height) : null,
       diagonal: diagonal ? Number(diagonal) : null,
-      status: ORDER_STATUSES.pendingDelivery,
+      status: OrderStatuses.pendingDelivery,
     };
 
     try {

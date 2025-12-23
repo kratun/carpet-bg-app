@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { debounce } from "lodash";
 
 import { orderService } from "../../services/orderService";
-import { OrderType, PaginationType } from "../../types";
+import { OrderDto, OrdersFilter, PaginationType } from "../../types";
 import { getStatusDisplayName } from "../../utils/statuses.utils";
 import { dateUtil } from "../../utils/date.utils";
 import { getNumberWithPrecisionAsString } from "../../utils/order.utils";
@@ -18,25 +18,27 @@ const initialPaginationState = {
   totalPages: 1,
 };
 
+const initialParamsState: OrdersFilter = {
+  searchTerm: "",
+  sortBy: "createdAt",
+  sortDirection: "desc",
+  pageIndex: 0,
+  pageSize: 10,
+  filter: {},
+};
+
 export default function Orders() {
   const navigate = useNavigate();
 
-  const [orders, setOrders] = useState<OrderType[]>([]);
-  const [params, setParams] = useState({
-    searchTerm: "",
-    sortBy: "createdAt",
-    sortOrder: "desc",
-    pageNumber: 1,
-    pageSize: 10,
-    filters: {},
-  });
+  const [orders, setOrders] = useState<OrderDto[]>([]);
+  const [params, setParams] = useState<OrdersFilter>(initialParamsState);
 
   const [pagination, setPagination] = useState(initialPaginationState);
   const [loading, setLoading] = useState(false);
 
   const fetchOrders = useCallback(async () => {
     setLoading(true);
-    const { items, pageIndex, totalPages }: PaginationType<OrderType> =
+    const { items, pageIndex, totalPages }: PaginationType<OrderDto> =
       await orderService.getAll(params);
     setOrders(items);
     setPagination((prev) => ({
@@ -57,25 +59,25 @@ export default function Orders() {
     setParams((prev) => ({
       ...prev,
       searchTerm: trimmedValue,
-      pageNumber: 1,
+      pageIndex: 0,
     }));
   }, 300);
 
-  const handleSort = (field: string) => {
-    setParams((prev) => ({
+  const handleSort = (field: keyof OrderDto) => {
+    setParams((prev: OrdersFilter) => ({
       ...prev,
       sortBy: field,
       sortOrder:
-        prev.sortBy === field && prev.sortOrder === "asc" ? "desc" : "asc",
+        prev.sortBy === field && prev.sortDirection === "asc" ? "desc" : "asc",
     }));
   };
 
-  const handlePageChange = (nextPageIndex: Number) => {
+  const handlePageChange = (nextPageIndex: number) => {
     setParams((prev) => ({ ...prev, pageIndex: nextPageIndex }));
   };
 
   const isMobile = window.innerWidth <= 768;
-  function handleQuickView(order: OrderType) {
+  function handleQuickView(order: OrderDto) {
     navigate(`/orders/${order.id}`);
     console.log(order);
   }
@@ -95,7 +97,7 @@ export default function Orders() {
         <table className={styles.table}>
           <thead>
             <tr>
-              <th onClick={() => handleSort("customerName")}>Phone</th>
+              <th onClick={() => handleSort("customerFullName")}>Phone</th>
               <th onClick={() => handleSort("pickupDate")}>Create At</th>
               {/* <th onClick={() => handleSort("pickupDate")}>Pick up Date</th> */}
               <th>Items</th>
@@ -117,7 +119,7 @@ export default function Orders() {
                 <td className={styles.center}>Няма намерени поръчки</td>
               </tr>
             ) : (
-              orders.map((order: OrderType) => (
+              orders.map((order: OrderDto) => (
                 <tr key={order.id}>
                   <td>{order.phoneNumber}</td>
                   <td>{dateUtil.format(order.createdAt)}</td>
@@ -152,10 +154,10 @@ export default function Orders() {
         </table>
       ) : (
         <div className={styles.cards}>
-          {orders.map((order: OrderType, idx: number) => (
+          {orders.map((order: OrderDto, idx: number) => (
             <div key={idx} className={styles.card}>
               <p>
-                <strong>Клиент:</strong> {order.customerName}
+                <strong>Клиент:</strong> {order.customerFullName}
               </p>
               <p>
                 <strong>Дата:</strong> {order.pickupDate}

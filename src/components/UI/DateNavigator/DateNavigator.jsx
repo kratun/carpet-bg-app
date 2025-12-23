@@ -8,12 +8,12 @@ export default function DatePickerControl({ selectedDate, onChange }) {
     onChange(e.target.value);
   };
 
-  const incrementDate = () => {
+  const incrementDay = () => {
     onChange(dateUtil.incrementDay(selectedDate, 1));
   };
 
-  const decrementDate = () => {
-    const newDate = dateUtil.decrementDate(selectedDate, 1);
+  const decrementDay = () => {
+    const newDate = dateUtil.decrementDay(selectedDate, 1);
     if (newDate.isBefore(today, "day")) {
       return;
     }
@@ -24,7 +24,7 @@ export default function DatePickerControl({ selectedDate, onChange }) {
   return (
     <div className={styles.dateControls}>
       <button
-        onClick={decrementDate}
+        onClick={decrementDay}
         disabled={!dateUtil.isAfter(selectedDate, today)}
       >
         ← Предишен ден
@@ -32,13 +32,13 @@ export default function DatePickerControl({ selectedDate, onChange }) {
 
       <input
         type="date"
-        min={today.format("YYYY-MM-DD")}
+        min={dateUtil.format(today, "YYYY-MM-DD")}
         value={selectedDate}
         onChange={handleDateChange}
         className={styles.dateInput}
       />
 
-      <button onClick={incrementDate}>Следващ ден →</button>
+      <button onClick={incrementDay}>Следващ ден →</button>
     </div>
   );
 }

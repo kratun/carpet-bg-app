@@ -6,23 +6,19 @@ const Customers = lazy(() => import("./pages/Customers/Customers"));
 const OrdersLayout = lazy(() => import("./components/Orders/OrdersLayout"));
 const Order = lazy(() => import("./pages/Order/Order"));
 const Orders = lazy(() => import("./pages/Orders/Orders"));
-const LogisticOrders = lazy(() =>
-  import("./components/Orders/OrderManager/LogisticOrders/LogisticOrders")
+const LogisticOrdersStep = lazy(() =>
+  import("./pages/LogisticOrders/LogisticOrders")
 );
 const ArrangePickupStep = lazy(() =>
   import("./components/Orders/OrderManager/ArrangePickupStep/ArrangePickupStep")
 );
 
 const WashingInProgressStep = lazy(() =>
-  import(
-    "./components/Orders/OrderManager/WashingInProgressStep/WashingInProgressStep"
-  )
+  import("./pages/WashingInProgressStep/WashingInProgressStep")
 );
 
-const SetupDeliveryDataStep = lazy(() =>
-  import(
-    "./components/Orders/OrderManager/SetupDeliveryDataStep/SetupDeliveryDataStep"
-  )
+const SetupLogisticDataStep = lazy(() =>
+  import("./pages/SetupLogistic/SetupLogisticData")
 );
 
 const NotFound = lazy(() => import("./components/NotFound"));
@@ -69,18 +65,18 @@ export const routesConfig = [
         ),
       },
       {
-        path: "steps/logistic-orders",
+        path: "steps/logistic",
         element: (
           <Suspense fallback={<Loading />}>
-            <LogisticOrders />
+            <LogisticOrdersStep />
           </Suspense>
         ),
       },
       {
-        path: "steps/setup-delivery",
+        path: "steps/setup-logistic-data",
         element: (
           <Suspense fallback={<Loading />}>
-            <SetupDeliveryDataStep />
+            <SetupLogisticDataStep />
           </Suspense>
         ),
       },

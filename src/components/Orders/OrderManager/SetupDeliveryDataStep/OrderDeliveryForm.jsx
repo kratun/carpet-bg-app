@@ -12,10 +12,10 @@ export default function OrderDeliveryForm({
   const [deliveryDate, setDeliveryDate] = useState(today);
   const [deliveryTimeRange, setDeliveryTimeRange] = useState(timeRanges[0]);
   const [orderNote, setOrderNote] = useState(order.note ?? "");
+  const [sameAsPickup, setSameAsPickup] = useState(true);
   const [deliveryAddress, setDeliveryAddress] = useState(
     order.deliveryAddress ?? ""
   );
-  const [sameAsPickup, setSameAsPickup] = useState(true);
 
   const handleOrderNoteChange = (value) => setOrderNote(value);
   const handleDeliveryAddressChange = (value) => setDeliveryAddress(value);
@@ -118,15 +118,17 @@ export default function OrderDeliveryForm({
         <label htmlFor="sameAsPickup">Същият като адреса за взимане</label>
       </div>
 
-      <label style={labelStyle}>
-        Адрес за доставка
-        <SpeechTextarea
-          id={`order-address-${order.id}`}
-          value={deliveryAddress}
-          onChange={handleDeliveryAddressChange}
-          disabled={sameAsPickup}
-        />
-      </label>
+      {!sameAsPickup && (
+        <label style={labelStyle}>
+          Адрес за доставка
+          <SpeechTextarea
+            id={`order-address-${order.id}`}
+            value={deliveryAddress}
+            onChange={handleDeliveryAddressChange}
+            disabled={sameAsPickup}
+          />
+        </label>
+      )}
 
       <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
         <label style={{ ...labelStyle, width: "30%" }}>

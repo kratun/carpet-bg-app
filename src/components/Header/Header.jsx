@@ -20,7 +20,7 @@ export default function Header({ isLoggedIn, onLogin, onLogout }) {
         <Link to="/orders" className={styles.navLink}>
           Поръчки
         </Link>
-        <Link to="/orders/steps/logistic-orders" className={styles.navLink}>
+        <Link to="/orders/steps/logistic" className={styles.navLink}>
           Logistic
         </Link>
         <Link to="/orders/steps/arrange-pickup" className={styles.navLink}>
@@ -29,8 +29,8 @@ export default function Header({ isLoggedIn, onLogin, onLogout }) {
         <Link to="/orders/steps/process-washing" className={styles.navLink}>
           Process washing
         </Link>
-        <Link to="/orders/steps/setup-delivery" className={styles.navLink}>
-          Setup delivery
+        <Link to="/orders/steps/setup-logistic-data" className={styles.navLink}>
+          Setup logistic
         </Link>
         <Link to="/about" className={styles.navLink}>
           За нас

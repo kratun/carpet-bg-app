@@ -3,14 +3,15 @@ import { useEffect, useState, useCallback } from "react";
 import customerService from "../../services/customerService";
 
 import SearchableList from "../../components/SearchableList/SearchableList";
-import Customer, { CustomerModel } from "../../components/Customers/Customer";
+import Customer from "../../components/Customers/Customer";
 import ModalHeader from "../../components/UI/Modal/ModalHeader";
 import Loading from "../../components/UI/Loading";
 
 import styles from "./Customers.module.css";
+import { AddressDto, UpdateAddress } from "../../types";
 
 export default function Customers() {
-  const [customers, setCustomers] = useState([]);
+  const [customers, setCustomers] = useState<AddressDto[]>([]);
   const [loading, setLoading] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -42,7 +43,7 @@ export default function Customers() {
     fetchAddresses();
   }, [fetchAddresses]);
 
-  const handleAddConsumer = async (customerData: CustomerModel) => {
+  const handleAddConsumer = async (customerData: UpdateAddress) => {
     await customerService.create(customerData);
     fetchAddresses();
     setIsModalOpen(true);
@@ -61,10 +62,10 @@ export default function Customers() {
     <div className={styles.container}>
       <SearchableList
         items={customers}
-        itemKeyFn={(customer: CustomerModel) => customer.userId}
+        itemKeyFn={(customer: AddressDto) => customer.userId}
         onActionClicked={handleAddConsumerClicked}
       >
-        {(customer: CustomerModel) => (
+        {(customer: AddressDto) => (
           <>
             <p>&rarr;</p>
             <div className={styles.listItem}>

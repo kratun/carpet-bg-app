@@ -1,16 +1,16 @@
 import { useState, useCallback, useEffect } from "react";
 
-import { orderService } from "../../../../services/orderService";
-import { useToastContext } from "../../../../stores/ToastContext";
-import { ORDER_STATUSES } from "../../../../utils/statuses.utils.js";
+import { orderService } from "../../services/orderService.js";
+import { useToastContext } from "../../stores/ToastContext.jsx";
 
-import SearchableAccordion from "../../../Accordion/SearchableAccordion.jsx";
+import SearchableAccordion from "../../components/Accordion/SearchableAccordion.jsx";
 
-import Pagination from "../../../UI/Pagination/Pagination.jsx";
-import OrderDeliveryForm from "./OrderDeliveryForm.jsx";
-import { dateUtil } from "../../../../utils/date.utils.js";
+import Pagination from "../../components/UI/Pagination/Pagination.js";
+import OrderDeliveryForm from "../../components/Orders/OrderManager/SetupDeliveryDataStep/OrderDeliveryForm.jsx";
+import { dateUtil } from "../../utils/date.utils.js";
+import { OrderStatuses } from "../../types/order.type.js";
 
-export default function SetupDeliveryDataStep() {
+export default function SetupLogisticData() {
   const formattedToday = dateUtil.getCurrentDateFormatted();
   const { toastSuccess, toastError, toastCustom } = useToastContext();
 
@@ -20,14 +20,25 @@ export default function SetupDeliveryDataStep() {
     sortOrder: "asc",
     page: 1,
     pageSize: 100,
-    statuses: [
-      ORDER_STATUSES.new,
-      ORDER_STATUSES.pendingPickup,
-      ORDER_STATUSES.washingComplete,
-    ],
-    filters: {
-      pickupDate: formattedToday,
-      deliveryDate: formattedToday,
+    filter: {
+      statuses: [
+        {
+          status: OrderStatuses.new,
+          date: formattedToday,
+        },
+        {
+          status: OrderStatuses.pendingPickup,
+          date: formattedToday,
+        },
+        {
+          status: OrderStatuses.washingComplete,
+          date: formattedToday,
+        },
+        {
+          status: OrderStatuses.pendingDelivery,
+          date: formattedToday,
+        },
+      ],
     },
   });
 
@@ -39,7 +50,7 @@ export default function SetupDeliveryDataStep() {
 
   const fetchOrders = useCallback(async () => {
     //setLoading(true);
-    const result = await orderService.getAll(params);
+    const result = await orderService.getSetupLogisticData(params);
 
     setOrders(result.items || []);
     setTotal(result.total);
@@ -57,19 +68,6 @@ export default function SetupDeliveryDataStep() {
   const handleSearchChange = useCallback((term) => {
     setParams((prev) => ({ ...prev, search: term }));
   }, []);
-
-  function handlePickupDataSave(orderId, deliveryData) {
-    try {
-      setTimeout(async () => {
-        await orderService.addDeliveryData(orderId, { ...deliveryData });
-        await fetchOrders();
-        toastSuccess("Delivery address updated successfully!");
-      }, 0);
-    } catch (err) {
-      console.error("Failed to update delivery address:", err);
-      toastError("Failed to update delivery address.");
-    }
-  }
 
   function handleSave(orderId, data, isDelivery) {
     const successMessage = isDelivery
@@ -100,8 +98,8 @@ export default function SetupDeliveryDataStep() {
       return;
     }
     const nextStatus = isDelivery
-      ? ORDER_STATUSES.washingComplete
-      : ORDER_STATUSES.new;
+      ? OrderStatuses.washingComplete
+      : OrderStatuses.new;
 
     toastCustom("Are you sure?", {
       action: {
@@ -113,21 +111,21 @@ export default function SetupDeliveryDataStep() {
     });
   }
 
-  function revertStatus(orderId, nextStatus) {
+  async function revertStatus(orderId, nextStatus) {
     const successMessage = `Order status has been changed to ${nextStatus} successfully!`;
 
     const errorMessage = `Failed to changed status to ${nextStatus}.`;
-
+    setLoading(true);
     const promise = orderService.revertOrderStatus(orderId, nextStatus);
     try {
-      setTimeout(async () => {
-        await promise;
-        await fetchOrders();
-        toastSuccess(successMessage);
-      }, 0);
+      await promise;
+      await fetchOrders();
+      toastSuccess(successMessage);
     } catch (err) {
       console.error(`${errorMessage}: `, err);
       toastError(errorMessage);
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -137,7 +135,7 @@ export default function SetupDeliveryDataStep() {
       {!loading && orders.length === 0 && <div>No orders found.</div>}
       {!loading && orders.length > 0 && (
         <div>
-          <h1 style={{ padding: "16px", margin: "0" }}>Setup Delivery data</h1>
+          <h1 style={{ padding: "16px", margin: "0" }}>Setup Logistic data</h1>
 
           <SearchableAccordion
             items={orders}
@@ -146,10 +144,9 @@ export default function SetupDeliveryDataStep() {
             itemKeyFn={(order) => order.id}
             renderContent={(order) => {
               const isPending =
-                order.status === ORDER_STATUSES.pendingPickup ||
-                order.status === ORDER_STATUSES.new;
-              const isDelivery =
-                order.status === ORDER_STATUSES.washingComplete;
+                order.status === OrderStatuses.pendingPickup ||
+                order.status === OrderStatuses.new;
+              const isDelivery = order.status === OrderStatuses.washingComplete;
 
               if (!isPending && !isDelivery) {
                 return <div className="text-gray-500">Unknown status</div>;
@@ -166,11 +163,11 @@ export default function SetupDeliveryDataStep() {
             }}
             renderTitle={(order) =>
               `${
-                order.status == ORDER_STATUSES.pendingPickup ||
-                order.status == ORDER_STATUSES.new
+                order.status == OrderStatuses.pendingPickup ||
+                order.status == OrderStatuses.new
                   ? "Вземане"
                   : "Досавка"
-              } -- ${order.phoneNumber} -- ${order.userFullName} -- ${
+              } -- ${order.phoneNumber} -- ${order.customerFullName} -- ${
                 order.orderItems.length
               } бр.`
             }

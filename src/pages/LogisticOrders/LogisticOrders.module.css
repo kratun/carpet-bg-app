@@ -1,0 +1,13 @@
+.container {
+  padding: 16px;
+}
+
+.heading {
+  padding: 16px;
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+.textGray {
+  color: #6b7280; /* Tailwind gray-500 */
+}

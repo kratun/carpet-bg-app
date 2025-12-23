@@ -1,0 +1,78 @@
+.fieldContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  border: 2px solid #2563eb;
+  border-radius: 4px;
+  background-color: #f8faff;
+  padding: 12px;
+}
+
+.label {
+  display: flex;
+  flex-direction: column;
+  font-weight: 600;
+  color: #2d7dbf;
+  margin-bottom: 4px;
+}
+
+.input {
+  width: 100%;
+  padding: 8px;
+  font-size: 16px;
+  border-radius: 4px;
+  border: 1px solid #2563eb;
+  box-sizing: border-box;
+  margin-top: 4px;
+}
+
+.inputError {
+  border: 2px solid red;
+}
+
+.errorText {
+  color: red;
+  font-size: 0.875rem;
+  margin-top: 4px;
+}
+
+.divider {
+  text-align: center;
+  font-weight: bold;
+  color: #2d7dbf;
+  font-size: 14px;
+}
+
+.totalPrice {
+  font-weight: bold;
+  color: #2d7dbf;
+  font-size: 16px;
+}
+
+.buttonsContainer {
+  display: flex;
+  gap: 8px;
+  justify-content: space-between;
+}
+
+.addButton {
+  background-color: #2d7dbf;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 10px 16px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.cancelButton {
+  background: transparent;
+  color: #2d7dbf;
+  border: 1px solid #2d7dbf;
+  border-radius: 6px;
+  padding: 10px 16px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+}

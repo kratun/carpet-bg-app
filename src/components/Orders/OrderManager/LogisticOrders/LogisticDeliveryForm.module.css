@@ -1,0 +1,87 @@
+.container {
+  padding: 16px;
+}
+
+.heading {
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+
+.totalSection {
+  margin-bottom: 16px;
+}
+
+.totalLabel {
+  font-size: 0.875rem;
+  color: #4b5563;
+}
+
+.totalAmount {
+  display: block;
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin-top: 4px;
+}
+
+.inputGroup {
+  margin-bottom: 16px;
+}
+
+.label {
+  display: block;
+  font-size: 0.875rem;
+  color: #4b5563;
+  margin-bottom: 4px;
+}
+
+.input {
+  width: 100%;
+  padding: 8px;
+  font-size: 1rem;
+  border-radius: 4px;
+  border: 1px solid #2563eb;
+  box-sizing: border-box;
+}
+
+.input:focus {
+  outline: none;
+  border-width: 2px;
+}
+
+.error {
+  margin-top: 4px;
+  font-size: 0.875rem;
+  color: #dc2626;
+}
+
+.actions {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: 12px;
+}
+
+.primaryButton {
+  background-color: #2563eb;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 8px 16px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.primaryButton:disabled {
+  background-color: #93c5fd;
+  cursor: not-allowed;
+}
+
+.secondaryButton {
+  background: white;
+  border: 1px solid #2563eb;
+  border-radius: 4px;
+  padding: 8px 16px;
+  cursor: pointer;
+  font-weight: 600;
+}

@@ -1,0 +1,61 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.title {
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: #1e3a8a;
+}
+
+.empty {
+  padding: 12px 0;
+  color: #374151;
+}
+
+.loading {
+  padding: 12px;
+  color: #6b7280;
+}
+
+.itemRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0;
+}
+
+.itemInfo {
+  flex: 1;
+  margin-right: 16px;
+}
+
+.itemTitle {
+  margin: 0;
+  font-weight: bold;
+  color: #1e3a8a;
+}
+
+.itemDetails {
+  margin: 4px 0 0;
+  color: #374151;
+}
+
+.actions {
+  display: flex;
+  gap: 8px;
+}
+
+.iconButton {
+  background: white;
+  border: none;
+  border-radius: 4px;
+  padding: 6px;
+  cursor: pointer;
+}
+
+.iconButton:hover {
+  background-color: #f1f5f9;
+}

@@ -1,5 +1,7 @@
 // orderStatuses.utils.ts
 
+import { OrderItemStatuses, OrderStatuses } from "../types";
+
 /* =========================
    Order statuses
 ========================= */
@@ -15,37 +17,25 @@ export type OrderStatus =
   | "completed"
   | "cancelled";
 
-export const ORDER_STATUSES: Record<OrderStatus, OrderStatus> = {
-  new: "new",
-  pendingPickup: "pendingPickup",
-  pickupComplete: "pickupComplete",
-  washingInProgress: "washingInProgress",
-  washingComplete: "washingComplete",
-  pendingDelivery: "pendingDelivery",
-  deliveryComplete: "deliveryComplete",
-  completed: "completed",
-  cancelled: "cancelled",
-};
-
-export function getStatusDisplayName(status: OrderStatus): string {
+export function getStatusDisplayName(status: OrderStatuses): string {
   switch (status) {
-    case ORDER_STATUSES.new:
+    case OrderStatuses.new:
       return "Нова";
-    case ORDER_STATUSES.pendingPickup:
+    case OrderStatuses.pendingPickup:
       return "Готова за взимане";
-    case ORDER_STATUSES.pickupComplete:
+    case OrderStatuses.pickupComplete:
       return "Взета";
-    case ORDER_STATUSES.washingInProgress:
+    case OrderStatuses.washingInProgress:
       return "Пране в процес";
-    case ORDER_STATUSES.washingComplete:
+    case OrderStatuses.washingComplete:
       return "Пране завършено";
-    case ORDER_STATUSES.pendingDelivery:
+    case OrderStatuses.pendingDelivery:
       return "Готова за доставка";
-    case ORDER_STATUSES.deliveryComplete:
+    case OrderStatuses.deliveryComplete:
       return "Доставена";
-    case ORDER_STATUSES.completed:
+    case OrderStatuses.completed:
       return "Завършена";
-    case ORDER_STATUSES.cancelled:
+    case OrderStatuses.cancelled:
       return "Отказана";
     default:
       return "Неизвестен статус";
@@ -56,29 +46,18 @@ export function getStatusDisplayName(status: OrderStatus): string {
    Order item statuses
 ========================= */
 
-export type OrderItemStatus =
-  | "new"
-  | "washingInProgress"
-  | "washingComplete"
-  | "deleted";
-
-export const ORDER_ITEM_STATUSES: Record<OrderItemStatus, OrderItemStatus> = {
-  new: "new",
-  washingInProgress: "washingInProgress",
-  washingComplete: "washingComplete",
-  deleted: "deleted",
-};
-
-export function getOrderItemStatusDisplayName(status: OrderItemStatus): string {
+export function getOrderItemStatusDisplayName(
+  status: OrderItemStatuses
+): string {
   switch (status) {
-    case ORDER_ITEM_STATUSES.new:
+    case OrderItemStatuses.new:
       return "Нова";
-    case ORDER_ITEM_STATUSES.washingInProgress:
+    case OrderItemStatuses.washingInProgress:
       return "Пране в процес";
-    case ORDER_ITEM_STATUSES.washingComplete:
+    case OrderItemStatuses.washingComplete:
       return "Пране завършено";
-    case ORDER_ITEM_STATUSES.deleted:
-      return "Изтрита";
+    case OrderItemStatuses.deleted:
+      return "Изтрит";
     default:
       return "Неизвестен статус";
   }

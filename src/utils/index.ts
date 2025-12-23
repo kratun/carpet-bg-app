@@ -3,3 +3,4 @@ export * from "./date.utils";
 export * from "./user.utils";
 export * from "./order.utils";
 export * from "./statuses.utils";
+export * from "./common.utils";

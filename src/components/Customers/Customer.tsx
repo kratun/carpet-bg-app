@@ -3,6 +3,7 @@ import { useState, ReactNode } from "react";
 import { validatePhoneNumber } from "../../utils";
 
 import styles from "./Customer.module.css";
+import { UpdateAddress } from "../../types";
 
 export interface CustomerModel {
   userId?: string | undefined;
@@ -16,7 +17,7 @@ export interface CustomerProps {
   customerName?: string;
   customerPhone?: string;
   customerAddress?: string;
-  onSave: (data: CustomerModel) => void;
+  onSave: (data: UpdateAddress) => void;
   onCancel: () => void;
   renderHeader?: () => ReactNode;
 }
@@ -57,7 +58,7 @@ export default function Customer({
   const handleSaveClick = () => {
     if (canNotSave) return;
 
-    const payload: CustomerModel = {
+    const payload: UpdateAddress = {
       userId,
       userFullName: name,
       phoneNumber,

@@ -1,0 +1,126 @@
+.container {
+  max-width: 480px;
+  margin: auto;
+  padding: 16px;
+  box-sizing: border-box;
+  color: #1e3a8a;
+}
+
+/* Style all inputs and selects inside .container */
+.container input,
+.container select {
+  padding: 8px;
+  font-size: 16px;
+  border-radius: 4px;
+  border: 1px solid #2563eb;
+  box-sizing: border-box;
+}
+
+.backButton {
+  background: none;
+  border: none;
+  color: #2d7dbf;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 16px;
+  padding-left: 0;
+}
+
+.heading {
+  color: #2d7dbf;
+  margin: 8px 0;
+}
+
+.label {
+  display: flex;
+  flex-direction: column;
+  font-weight: 600;
+  color: #2d7dbf;
+  padding: 8px 0;
+}
+
+.checkboxLabel {
+  display: flex;
+  justify-content: left;
+  font-weight: 600;
+  color: #2d7dbf;
+}
+
+.inputError {
+  border: 2px solid red;
+}
+
+.errorText {
+  color: red;
+  font-size: 0.875rem;
+}
+
+.row {
+  display: flex;
+  text-align: center;
+  gap: 8px;
+  align-items: stretch;
+}
+
+.fieldset {
+  display: flex;
+  flex-direction: column;
+  border: 2px solid #2563eb;
+  border-radius: 4px;
+  padding: 10px;
+  margin-top: 24px;
+  gap: 8px;
+}
+
+.legend {
+  color: #2d7dbf;
+  font-weight: bold;
+}
+
+.submitButton {
+  margin-top: 24px;
+  padding: 12px 20px;
+  background-color: #2d7dbf;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  font-size: 16px;
+  width: 100%;
+}
+
+.submitButton:disabled {
+  background-color: #aac4e8;
+  cursor: not-allowed;
+}
+
+.modalOverlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modalContent {
+  background-color: #fff;
+  padding: 24px;
+  border-radius: 8px;
+  width: 400px;
+  max-width: 90%;
+}
+
+.closeButton {
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.logisticActionsContainer {
+  display: flex;
+  gap: 8px;
+  justify-content: space-between;
+}

@@ -8,7 +8,7 @@ const ITEMS_PER_PAGE = 5;
 export default function SearchableAccordion({
   items,
   loading,
-  notFoundMessage,
+  notFoundMessage = "Няма намерени резултати.",
   itemKeyFn,
   renderTitle,
   renderContent,
@@ -22,7 +22,7 @@ export default function SearchableAccordion({
   // Debounce search input
   useEffect(() => {
     const timer = setTimeout(() => {
-      onSearchChange(inputValue);
+      onSearchChange(inputValue?.trim() || "");
       // setDebouncedValue(inputValue);
     }, 300);
     return () => clearTimeout(timer);
@@ -44,7 +44,7 @@ export default function SearchableAccordion({
           <Loading />
         </div>
       )}
-      {!loading && (
+      {!loading && items.length === 0 && (
         <div>
           <p>{notFoundMessage}</p>
         </div>
@@ -54,15 +54,12 @@ export default function SearchableAccordion({
         {!loading &&
           items.length > 0 &&
           items.map((item) => (
-            <Accordion.Item
-              key={itemKeyFn(item)}
-              id={itemKeyFn(item)}
-              // className={styles.searchableAccordionItem}
-            >
+            <Accordion.Item key={itemKeyFn(item)} id={itemKeyFn(item)}>
               <Accordion.Title className={styles.searchableAccordionItem}>
                 {renderTitle(item)}
               </Accordion.Title>
               <Accordion.Content className={styles.searchableAccordionContent}>
+                {/* <div>{renderContent(item)}</div> */}
                 {renderContent(item)}
               </Accordion.Content>
             </Accordion.Item>
